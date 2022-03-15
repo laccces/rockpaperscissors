@@ -1,95 +1,100 @@
 let pScore = 0;
 let cScore = 0;
 
-const getUserChoice = (userInput) => {
-   userInput = prompt("Rock, Paper or Scissors?").toLowerCase();
-    if (userInput === 'rock' || userInput === 'paper' || userInput === 'scissors'){
-        return userInput
-    } else {
-        console.log('Incorrect input!')
-    }
-}
+function game () {
 
-const getComputerChoice = () => {
-    const randomNumber = Math.floor(Math.random() * 3);
-    switch (randomNumber) {
-        case 0:
-            return 'rock';
-        case 1:
-            return 'paper';
-        case 2:
-            return 'scissors';
-    };
-};
+    const computerChoiceDisplay = document.getElementById('computer-choice')
+    const userChoiceDisplay = document.getElementById('user-choice')
+    const resultsDisplay = document.getElementById('result')
+    const possibleChoices = document.querySelectorAll('button')
 
-const determineWinner = (userChoice, computerChoice) => {
-    if (userChoice === computerChoice) {
-        return 'You draw!';
-    };
-    if (userChoice === 'rock') {
-        if (computerChoice === 'paper') {
-            cScore++;
-            return 'Sorry, you lose.'
-        } else {
-            pScore++;
-            return 'You win!'
-        }   
-    }
-    if (userChoice === 'paper') {
-        if (computerChoice === 'rock') {
-            cScore++;
-            return 'Sorry, you lose.'
-        } else {
-            pScore++;
-            return 'You win!'
+    let userChoice
+    let computerChoice
+    let result
+
+    possibleChoices.forEach(possibleChoice => possibleChoice.addEventListener('click', (e) => {
+        userChoice = e.target.id
+        userChoiceDisplay.innerHTML = userChoice
+        getComputerChoice()
+        getResult()
+    }));
+
+    const getComputerChoice = () => {
+        const randomNumber = Math.floor(Math.random() * 3) + 1;
+        
+        if(randomNumber === 1) {
+            computerChoice = 'rock'
         }
-    }
-    if (userChoice === 'scissors') {
-        if (computerChoice === 'rock') {
-            pScore++;
-            return 'You win!'
-        } else {
-            cScore++;
-            return 'Sorry, you lose.'
+        if(randomNumber === 2) {
+            computerChoice = 'scissors'
         }
-    }
-}
-
-const game = () => {
-    const playGame = () => {
-        const userChoice = getUserChoice('Paper');
-        const computerChoice = getComputerChoice();
-        console.log('You threw: ' + userChoice);
-        console.log('Computer threw: ' + computerChoice);
-        console.log(determineWinner(userChoice, computerChoice));
+        if(randomNumber === 3) {
+            computerChoice = 'paper'
+        }
+        computerChoiceDisplay.innerHTML = computerChoice
     };
 
-    playGame ();
-    
+    function getResult() {
+        if (computerChoice === userChoice) {
+            result = 'its a draw!'
+        }
+        if(computerChoice === 'rock' && userChoice === 'paper') {
+            result = 'you win!';
+            pScore++;
+            updateScore();
+        }
+        if(computerChoice === 'rock' && userChoice === 'scissors') {
+            result = 'you lose!';
+            cScore++;
+            updateScore();
+        }
+        if(computerChoice === 'paper' && userChoice === 'scissors') {
+            result = 'you win!';
+            pScore++;
+            updateScore();
+        }
+        if(computerChoice === 'paper' && userChoice === 'rock') {
+            result = 'you lose!';
+            cScore++;
+            updateScore();
+        }
+        if(computerChoice === 'scissors' && userChoice === 'rock') {
+            result = 'you win!';
+            pScore++;
+            updateScore();
+        }
+        if(computerChoice === 'scissors' && userChoice === 'paper') {
+            result = 'you lose!';
+            cScore++;
+            updateScore();
+        }
+        resultsDisplay.innerHTML = result
+    }
+
 }
 
-for(let i = 0; i < 5; i++) {
-    console.log(game)
-    console.log('Player Score ' + pScore)
-    console.log('Computer Score ' + cScore)
+game();
 
-game ();
-
-console.log('Final Player score ' + pScore)
-console.log('Final Computer Score ' + cScore)
-
+const updateScore = () => {
+    const playerScore = document.getElementById('your-score')
+    const computerScore = document.getElementById('computer-score')
+    playerScore.textContent = pScore;
+    computerScore.textContent = cScore;
+}
+/*
 const finalScore = () => {
-    if (pScore > cScore) {
-        console.log('YOU WIN!!!')
+    const finalResult = document.getElementById('final-score') {
+    
+    
+        finalResult.textContent = 'You win!'
     }
-    if (pScore === cScore) {
-        console.log('DRAW')
+    if(cScore > pScore) {
+        finalResult.textContent = 'You lose!'
     } else {
-        console.log('You lost :(')
+        finalResult.textContent = 'Draw'
     }
-
+}
 }
 
-finalScore ();
-
-}
+finalScore();
+*/
